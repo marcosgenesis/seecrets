@@ -29,4 +29,15 @@ export const postRouter = createTRPCRouter({
       orderBy: { createdAt: "desc" },
     });
   }),
+
+  getAllFromUser: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      return ctx.db.post.findMany({
+        where: {
+          senderId: input.userId,
+        },
+      });
+    }),
 });

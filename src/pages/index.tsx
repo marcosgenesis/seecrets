@@ -1,4 +1,5 @@
 import { useUser } from "@clerk/nextjs";
+import MyPosts from "~/components/MyPosts";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
@@ -14,7 +15,7 @@ import { api } from "~/utils/api";
 
 export default function Home() {
   const { user } = useUser();
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
+  const myposts = api.post.getAllFromUser.useQuery({ userId: user?.id });
 
   return (
     <div className="flex justify-center gap-2 ">
@@ -36,21 +37,7 @@ export default function Home() {
           </CardFooter>
         </Card>
       </div>
-      <Card className="my-4 flex flex-col gap-2 w-1/4">
-        <CardHeader>
-          <CardTitle>Minhas postagens</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-2">
-          {[...Array(10)].map((_, i) => (
-            <div>
-              <div className="flex flex-row items-center justify-between">
-                <p>Post #{i + 1}</p>
-                <Button size={"icon"}>V</Button>
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+     <MyPosts/>
     </div>
   );
 }
