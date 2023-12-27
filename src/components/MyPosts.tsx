@@ -15,6 +15,7 @@ const MyPosts: React.FC = () => {
         <CardTitle>Minhas postagens</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
+        {posts.data.length === 0 && <p>Você ainda não postou nada.</p>}
         {posts.data.map((_, i) => (
           <div>
             <div className="flex flex-row items-center justify-between">

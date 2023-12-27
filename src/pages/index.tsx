@@ -15,7 +15,6 @@ import { api } from "~/utils/api";
 
 export default function Home() {
   const { user } = useUser();
-  const myposts = api.post.getAllFromUser.useQuery({ userId: user?.id });
 
   return (
     <div className="flex justify-center gap-2 ">
@@ -37,7 +36,7 @@ export default function Home() {
           </CardFooter>
         </Card>
       </div>
-     <MyPosts/>
+      <MyPosts />
     </div>
   );
 }

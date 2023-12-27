@@ -15,7 +15,7 @@ model Post {
     title      String
     content    String
     senderId   String
-    receiverId String
+    receiverId String?
     comments   Comment[]
     createdAt  DateTime  @default(now())
     updatedAt  DateTime  @updatedAt
