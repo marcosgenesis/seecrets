@@ -1,4 +1,5 @@
 import { useUser } from "@clerk/nextjs";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import MyPosts from "~/components/MyPosts";
@@ -7,14 +8,10 @@ import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
 } from "~/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 
 const newPostSchema = z.object({
@@ -28,6 +25,8 @@ const newPostSchema = z.object({
 
 export default function Home() {
   const { user } = useUser();
+  const createPost = api.post.create.useMutation();
+  const getPosts = api.post.getAllFromUser.useQuery({ userId: user?.id ?? '' });
   const form = useForm<z.infer<typeof newPostSchema>>({
     resolver: zodResolver(newPostSchema),
     defaultValues: {
@@ -36,8 +35,15 @@ export default function Home() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof newPostSchema>) {
+    if (!user) return;
+    await createPost.mutateAsync({
+      title: values.title,
+      content: values.content,
+      senderId: user?.id,
+    });
+    form.reset();
+    await getPosts.refetch();
   }
 
   return (
@@ -48,7 +54,7 @@ export default function Home() {
             <div className="flex items-center justify-center gap-2">
               <Avatar>
                 <AvatarImage src={user?.imageUrl} />
-                <AvatarFallback>{user?.firstName[0]}</AvatarFallback>
+                <AvatarFallback>{user?.firstName[0] ?? 'U'}</AvatarFallback>
               </Avatar>
               <p>Bem vindo novamente, {user?.firstName}!</p>
             </div>
@@ -83,7 +89,7 @@ export default function Home() {
                     </FormItem>
                   )}
                 />
-                <Button className="w-full" type="submit">Submit</Button>
+                <Button className="w-full" type="submit" disabled={createPost.isLoading}>{createPost.isLoading ? 'Carregando...' : 'Criar postagem'}</Button>
               </form>
             </Form>
           </CardContent>
