@@ -36,6 +36,7 @@ const newPostSchema = z.object({
   content: z.string().min(2, {
     message: "Descrição precisa conter pelo menos 2 caracteres.",
   }),
+  uniqueView: z.boolean().default(false),
 });
 
 export default function Home() {
@@ -47,6 +48,7 @@ export default function Home() {
     defaultValues: {
       title: "",
       content: "",
+      uniqueView: false,
     },
   });
 
@@ -56,6 +58,7 @@ export default function Home() {
       title: values.title,
       content: values.content,
       senderId: user?.id,
+      uniqueView: values.uniqueView,
     });
     form.reset();
     await getPosts.refetch();
@@ -134,10 +137,15 @@ export default function Home() {
                   />
                   <FormField
                     control={form.control}
-                    name="content"
+                    name="uniqueView"
                     render={({ field }) => (
                       <div className="flex items-center gap-2">
-                        <Toggle {...field} variant={"outline"}>
+                        <Toggle
+                          onPressedChange={field.onChange}
+                          pressed={field.value}
+                          variant={"outline"}
+                          {...field}
+                        >
                           <ViewIcon />
                         </Toggle>
                         <p>Visualização única</p>
