@@ -1,5 +1,6 @@
 import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { MessageCircle, RefreshCcw, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import MyPosts from "~/components/MyPosts";
@@ -12,6 +13,7 @@ import {
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { api } from "~/utils/api";
 
 const newPostSchema = z.object({
@@ -47,55 +49,72 @@ export default function Home() {
   }
 
   return (
-    <div className="flex justify-center gap-2 ">
-      <div className="my-4">
-        <Card>
-          <CardContent className="flex flex-col gap-2 py-4">
-            <div className="flex items-center justify-center gap-2">
-              <Avatar>
-                <AvatarImage src={user?.imageUrl} />
-                <AvatarFallback>{user?.firstName[0] ?? 'U'}</AvatarFallback>
-              </Avatar>
-              <p>Bem vindo novamente, {user?.firstName}!</p>
+    <div >
+      <div className="flex h-dvh items-center justify-center flex-col">
+        <div className="h-1/2 flex flex-col justify-evenly items-center">
+          <p>Esta é uma mensagem aleatória de um usuário qualquer, pode ser de qualquer pessoa do mundo</p>
+          <div className="flex justify-between w-1/2">
+            <Button variant={'outline'}><RefreshCcw size={16} className="mr-2" /> Atualizar</Button>
+            <div className="flex gap-2">
+              <ToggleGroup type="single">
+                <ToggleGroupItem value="like" variant={'outline'}><ThumbsUp size={16} /></ToggleGroupItem>
+                <ToggleGroupItem value="deslike" variant={'outline'}><ThumbsDown size={16} /></ToggleGroupItem>
+              </ToggleGroup>
+              <Button variant={'outline'}><MessageCircle size={16} /></Button>
+
             </div>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-2"
-              >
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Título</FormLabel>
-                      <FormControl>
-                        <Input placeholder="shadcn" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="content"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Descrição</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="shadcn" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button className="w-full" type="submit" disabled={createPost.isLoading}>{createPost.isLoading ? 'Carregando...' : 'Criar postagem'}</Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
+        <div className="my-4 flex gap-4 items-start">
+          <Card>
+            <CardContent className="flex flex-col gap-2 py-4">
+              <div className="flex items-center justify-center gap-2">
+                <Avatar>
+                  <AvatarImage src={user?.imageUrl} />
+                  <AvatarFallback>{user?.firstName[0] ?? 'U'}</AvatarFallback>
+                </Avatar>
+                <p>Bem vindo novamente, {user?.firstName}!</p>
+              </div>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-2"
+                >
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Título</FormLabel>
+                        <FormControl>
+                          <Input placeholder="shadcn" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="content"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Descrição</FormLabel>
+                        <FormControl>
+                          <Textarea placeholder="shadcn" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button className="w-full" type="submit" disabled={createPost.isLoading}>{createPost.isLoading ? 'Carregando...' : 'Criar postagem'}</Button>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+          <MyPosts />
+        </div>
       </div>
-      <MyPosts />
+
     </div>
   );
 }
