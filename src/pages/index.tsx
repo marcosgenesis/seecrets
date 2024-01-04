@@ -91,7 +91,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="my-4 flex items-start gap-4">
+        <div className="my-4 flex items-start justify-center gap-4">
           <Card>
             <CardContent className="flex flex-col gap-2 py-4">
               <div className="flex items-center justify-center gap-2">

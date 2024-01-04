@@ -48,6 +48,9 @@ export const postRouter = createTRPCRouter({
         where: {
           senderId: input.userId,
         },
+        include: {
+          comments: true,
+        },
       });
     }),
 });
