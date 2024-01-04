@@ -11,7 +11,7 @@ const MyPosts: React.FC = () => {
     return <p>Carregando...</p>;
   }
   return (
-    <Card className="flex w-1/4 flex-col gap-2">
+    <Card className="flex w-2/3 flex-col gap-2">
       <CardHeader>
         <CardTitle>Minhas postagens</CardTitle>
       </CardHeader>
