@@ -12,11 +12,7 @@ import {
 } from "./ui/carousel";
 import {
   Focus,
-  Grid,
-  List,
-  ListChecksIcon,
   ListIcon,
-  RowsIcon,
 } from "lucide-react";
 
 const MyPosts: React.FC = () => {
