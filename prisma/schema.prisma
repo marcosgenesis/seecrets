@@ -17,6 +17,7 @@ model Post {
     senderId   String
     receiverId String?
     comments   Comment[]
+    uniqueView Boolean   @default(false)
     createdAt  DateTime  @default(now())
     updatedAt  DateTime  @updatedAt
 }
