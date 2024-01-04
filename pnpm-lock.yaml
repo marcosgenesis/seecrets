@@ -26,6 +26,7 @@ specifiers:
   autoprefixer: ^10.4.14
   class-variance-authority: ^0.7.0
   clsx: ^2.0.0
+  embla-carousel-react: 8.0.0-rc18
   eslint: ^8.54.0
   lucide-react: ^0.302.0
   next: ^14.0.3
@@ -61,6 +62,7 @@ dependencies:
   '@trpc/server': 10.45.0
   class-variance-authority: 0.7.0
   clsx: 2.0.0
+  embla-carousel-react: 8.0.0-rc18_react@18.2.0
   lucide-react: 0.302.0_react@18.2.0
   next: 14.0.4_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
@@ -1528,6 +1530,28 @@ packages:
   /electron-to-chromium/1.4.616:
     resolution: {integrity: sha512-1n7zWYh8eS0L9Uy+GskE0lkBUNK83cXTVJI0pU3mGprFsbfSdAc15VTFbo+A+Bq4pwstmL30AVcEU3Fo463lNg==}
     dev: true
+
+  /embla-carousel-react/8.0.0-rc18_react@18.2.0:
+    resolution: {integrity: sha512-sif+zkOnQIJzZJJQdtE/kDBrlxNt7Vm6zI8i17qT6QYv3dnazPVf4EEfXQ2CZdh7J3UPwnIMS3Q55E1a8uxJ/g==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.1 || ^18.0.0
+    dependencies:
+      embla-carousel: 8.0.0-rc18
+      embla-carousel-reactive-utils: 8.0.0-rc18_embla-carousel@8.0.0-rc18
+      react: 18.2.0
+    dev: false
+
+  /embla-carousel-reactive-utils/8.0.0-rc18_embla-carousel@8.0.0-rc18:
+    resolution: {integrity: sha512-VOFfvhkICz4GKXb/huMTspYVR8mx8C4uDf0Kp+jA9iZNUA4lmlfxxYUr++SwIy1xABycpqML/9hP2tV6Nn0AEQ==}
+    peerDependencies:
+      embla-carousel: 8.0.0-rc18
+    dependencies:
+      embla-carousel: 8.0.0-rc18
+    dev: false
+
+  /embla-carousel/8.0.0-rc18:
+    resolution: {integrity: sha512-MtiatQCt+R/lEKl2D4TyAx2Ba4/gfosQIY+Y/ooZu1yahxTbFLyhGW8aodn0GW2WZ6jO3Qpfx7VuqCPdRV5moQ==}
+    dev: false
 
   /emoji-regex/8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
