@@ -2,6 +2,9 @@ import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   EyeIcon,
+  Loader,
+  Loader2Icon,
+  LoaderIcon,
   MessageCircle,
   RefreshCcw,
   ThumbsDown,
@@ -42,6 +45,10 @@ const newPostSchema = z.object({
 export default function Home() {
   const { user } = useUser();
   const createPost = api.post.create.useMutation();
+  const likePost = api.post.like.useMutation();
+  const removeLikePost = api.post.removeLike.useMutation();
+  const deslikePost = api.post.deslike.useMutation();
+  const removeDeslikePost = api.post.removeDeslike.useMutation();
   const getPosts = api.post.getAllFromUser.useQuery({ userId: user?.id ?? "" });
   const form = useForm<z.infer<typeof newPostSchema>>({
     resolver: zodResolver(newPostSchema),
@@ -64,6 +71,43 @@ export default function Home() {
     await getPosts.refetch();
   }
 
+  async function handlePostActions(value: string) {
+    if (!user) return;
+    if (!value) {
+      await removeDeslikePost.mutateAsync({
+        postId: "96717ee2-162b-486e-9eec-f8a0a53c23a8",
+        senderId: user?.id,
+      });
+      await removeLikePost.mutateAsync({
+        postId: "96717ee2-162b-486e-9eec-f8a0a53c23a8",
+        senderId: user?.id,
+      });
+    };
+
+
+    if (value === "like") {
+      await removeDeslikePost.mutateAsync({
+        postId: "96717ee2-162b-486e-9eec-f8a0a53c23a8",
+        senderId: user?.id,
+      });
+      await likePost.mutateAsync({
+        postId: "96717ee2-162b-486e-9eec-f8a0a53c23a8",
+        senderId: user?.id,
+      });
+    }
+    if (value === "deslike") {
+      await removeLikePost.mutateAsync({
+        postId: "96717ee2-162b-486e-9eec-f8a0a53c23a8",
+        senderId: user?.id,
+      });
+      await deslikePost.mutateAsync({
+        postId: "96717ee2-162b-486e-9eec-f8a0a53c23a8",
+        senderId: user?.id,
+      });
+    }
+
+  }
+
   return (
     <div>
       <div className="flex h-dvh flex-col items-center justify-center">
@@ -77,12 +121,12 @@ export default function Home() {
               <RefreshCcw size={16} className="mr-2" /> Atualizar
             </Button>
             <div className="flex gap-2">
-              <ToggleGroup type="single">
-                <ToggleGroupItem value="like" variant={"outline"}>
-                  <ThumbsUp size={16} />
+              <ToggleGroup type="single" onValueChange={handlePostActions}>
+                <ToggleGroupItem value="like" variant={"outline"} disabled={likePost.isLoading}>
+                  {likePost.isLoading || removeLikePost.isLoading ? <Loader2Icon size={16} className="animate-spin" /> : <ThumbsUp size={16} />}
                 </ToggleGroupItem>
                 <ToggleGroupItem value="deslike" variant={"outline"}>
-                  <ThumbsDown size={16} />
+                  {deslikePost.isLoading || removeDeslikePost.isLoading ? <Loader2Icon size={16} className="animate-spin" /> : <ThumbsDown size={16} />}
                 </ToggleGroupItem>
               </ToggleGroup>
               <Button variant={"outline"}>

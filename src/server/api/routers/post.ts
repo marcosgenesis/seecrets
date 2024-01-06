@@ -39,7 +39,39 @@ export const postRouter = createTRPCRouter({
       orderBy: { createdAt: "desc" },
     });
   }),
+  like: publicProcedure.input(z.object({ senderId: z.string(), postId: z.string() })).mutation(async ({ ctx, input }) => {
+    await ctx.db.like.create({
+      data: {
+        senderId: input.senderId,
+        postId: input.postId,
+      }
+    })
+  }),
+  removeLike: publicProcedure.input(z.object({ senderId: z.string(), postId: z.string() })).mutation(async ({ ctx, input }) => {
+    await ctx.db.like.deleteMany({
+      where: {
+        senderId: input.senderId,
+        postId: input.postId,
+      }
+    })
+  }),
+  deslike: publicProcedure.input(z.object({ senderId: z.string(), postId: z.string() })).mutation(async ({ ctx, input }) => {
+    await ctx.db.deslike.create({
+      data: {
+        senderId: input.senderId,
+        postId: input.postId,
+      }
+    })
+  }),
 
+  removeDeslike: publicProcedure.input(z.object({ senderId: z.string(), postId: z.string() })).mutation(async ({ ctx, input }) => {
+    await ctx.db.deslike.deleteMany({
+      where: {
+        senderId: input.senderId,
+        postId: input.postId,
+      }
+    })
+  }),
   getAllFromUser: publicProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {

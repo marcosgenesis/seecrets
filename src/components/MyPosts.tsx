@@ -34,7 +34,7 @@ const MyPosts: React.FC = () => {
             variant={"outline"}
             onClick={() => setShowList(!showList)}
           >
-            {showList ? (
+            {!showList ? (
               <ListIcon className="text-black" size={16} />
             ) : (
               <Focus size={16} />
@@ -63,8 +63,8 @@ const MyPosts: React.FC = () => {
             >
               <CarouselContent>
                 {posts.data.map((item) => (
-                  <CarouselItem key={item.id} className="basics-1/3">
-                    <div className="flex flex-col items-center justify-center rounded-md bg-gray-50 p-4">
+                  <CarouselItem key={item.id}>
+                    <div className="h-full flex flex-col items-center justify-center rounded-md bg-gray-50 p-4">
                       <p className="text-xl font-medium">{item.title}</p>
                       <p>{item.content}</p>
                       <Button>{item.comments?.length + " Comentários"}</Button>

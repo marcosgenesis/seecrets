@@ -22,6 +22,7 @@ model Post {
     updatedAt  DateTime  @updatedAt
     likes      Like[]
     deslikes   Deslike[]
+    views      Int       @default(0)
 }
 
 model Like {
