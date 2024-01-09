@@ -34,10 +34,29 @@ export const postRouter = createTRPCRouter({
       });
     }),
 
-  getLatest: publicProcedure.query(({ ctx }) => {
-    return ctx.db.post.findFirst({
-      orderBy: { createdAt: "desc" },
+  getRandomPost: publicProcedure.query(async ({ ctx }) => {
+    const post = await ctx.db.post.findFirst({
+      where: {
+        views: {
+          gte: 0
+        }
+      },
+      orderBy: {
+        updatedAt: 'asc'
+      }
     });
+    await ctx.db.post.update({
+      where: {
+        id: post.id
+      },
+      data: {
+        views: {
+          increment: 1
+        },
+        updatedAt: new Date(),
+      }
+    });
+    return post;
   }),
   like: publicProcedure.input(z.object({ senderId: z.string(), postId: z.string() })).mutation(async ({ ctx, input }) => {
     await ctx.db.like.create({
