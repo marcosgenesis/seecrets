@@ -12,7 +12,8 @@ import {
 } from "./ui/carousel";
 import {
   Focus,
-  ListIcon,
+  ListIcon, ThumbsDownIcon,
+  ThumbsUp, ViewIcon
 } from "lucide-react";
 
 const MyPosts: React.FC = () => {
@@ -46,11 +47,8 @@ const MyPosts: React.FC = () => {
         {posts.data.length === 0 && <p>Você ainda não postou nada.</p>}
         {showList ? (
           posts.data.map((item) => (
-            <div key={item.id}>
-              <div className="flex flex-row items-center justify-between">
-                <p>{item.title}</p>
-                <Button size={"icon"}>V</Button>
-              </div>
+            <div className="flex flex-row items-center justify-between">
+              <p className="w-80">{item.title}</p>
             </div>
           ))
         ) : (
@@ -64,10 +62,21 @@ const MyPosts: React.FC = () => {
               <CarouselContent>
                 {posts.data.map((item) => (
                   <CarouselItem key={item.id}>
-                    <div className="h-full flex flex-col items-center justify-center rounded-md bg-gray-50 p-4">
+                    <div className="flex h-full flex-col items-center justify-evenly rounded-md bg-gray-50 p-4">
                       <p className="text-xl font-medium">{item.title}</p>
-                      <p>{item.content}</p>
-                      <Button>{item.comments?.length + " Comentários"}</Button>
+                      <p className="overflow-hidden text-ellipsis text-sm">
+                        {item.content}
+                      </p>
+                      <div className="flex items-center justify-center gap-2">
+                        <ViewIcon size={16} />
+                        <p>{item.views}</p>
+
+                        <ThumbsUp size={16} />
+                        <p>{item._count.likes}</p>
+
+                        <ThumbsDownIcon size={16} />
+                        <p>{item._count.deslikes}</p>
+                      </div>
                     </div>
                   </CarouselItem>
                 ))}

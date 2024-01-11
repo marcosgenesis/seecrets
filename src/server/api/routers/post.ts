@@ -117,7 +117,13 @@ export const postRouter = createTRPCRouter({
           senderId: input.userId,
         },
         include: {
-          comments: true,
+          _count: {
+            select: {
+              comments: true,
+              likes: true,
+              deslikes: true,
+            },
+          },
         },
       });
     }),
