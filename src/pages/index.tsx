@@ -81,32 +81,32 @@ export default function Home() {
     if (!user) return;
     if (!value) {
       await removeDeslikePost.mutateAsync({
-        postId: "96717ee2-162b-486e-9eec-f8a0a53c23a8",
+        postId: getRandomPost.data.id,
         senderId: user?.id,
       });
       await removeLikePost.mutateAsync({
-        postId: "96717ee2-162b-486e-9eec-f8a0a53c23a8",
+        postId: getRandomPost.data.id,
         senderId: user?.id,
       });
     }
 
     if (value === "like") {
       await removeDeslikePost.mutateAsync({
-        postId: "96717ee2-162b-486e-9eec-f8a0a53c23a8",
+        postId: getRandomPost.data.id,
         senderId: user?.id,
       });
       await likePost.mutateAsync({
-        postId: "96717ee2-162b-486e-9eec-f8a0a53c23a8",
+        postId: getRandomPost.data.id,
         senderId: user?.id,
       });
     }
     if (value === "deslike") {
       await removeLikePost.mutateAsync({
-        postId: "96717ee2-162b-486e-9eec-f8a0a53c23a8",
+        postId: getRandomPost.data.id,
         senderId: user?.id,
       });
       await deslikePost.mutateAsync({
-        postId: "96717ee2-162b-486e-9eec-f8a0a53c23a8",
+        postId: getRandomPost.data.id,
         senderId: user?.id,
       });
     }
@@ -128,8 +128,8 @@ export default function Home() {
             <RefreshCcw size={16} className="mr-2" /> Atualizar
           </Button>
           <Button variant={"outline"}>
-              <MessageCircle size={16} />
-            </Button>
+            <MessageCircle size={16} />
+          </Button>
           <div className="flex gap-2">
             <ToggleGroup type="single" onValueChange={handlePostActions}>
               <ToggleGroupItem
@@ -153,7 +153,7 @@ export default function Home() {
             </ToggleGroup>
           </div>
         </div>
-        <div className="my-4 w-1/2 flex items-start justify-between gap-4">
+        <div className="my-4 flex w-1/2 items-start justify-between gap-4">
           <Card className="w-full">
             <CardContent className="flex flex-col gap-2 py-4">
               <div className="flex items-center justify-center gap-2">
