@@ -34,63 +34,80 @@ export const postRouter = createTRPCRouter({
       });
     }),
 
-  getRandomPost: publicProcedure.query(async ({ ctx }) => {
-    const post = await ctx.db.post.findFirst({
-      where: {
-        views: {
-          gte: 0
-        }
-      },
-      orderBy: {
-        updatedAt: 'asc'
-      }
-    });
-    await ctx.db.post.update({
-      where: {
-        id: post.id
-      },
-      data: {
-        views: {
-          increment: 1
+  getRandomPost: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const post = await ctx.db.post.findFirst({
+        where: {
+          views: {
+            gte: 0,
+          },
+          senderId: {
+            not: input.userId,
+          },
         },
-        updatedAt: new Date(),
-      }
-    });
-    return post;
-  }),
-  like: publicProcedure.input(z.object({ senderId: z.string(), postId: z.string() })).mutation(async ({ ctx, input }) => {
-    await ctx.db.like.create({
-      data: {
-        senderId: input.senderId,
-        postId: input.postId,
-      }
-    })
-  }),
-  removeLike: publicProcedure.input(z.object({ senderId: z.string(), postId: z.string() })).mutation(async ({ ctx, input }) => {
-    await ctx.db.like.deleteMany({
-      where: {
-        senderId: input.senderId,
-        postId: input.postId,
-      }
-    })
-  }),
-  deslike: publicProcedure.input(z.object({ senderId: z.string(), postId: z.string() })).mutation(async ({ ctx, input }) => {
-    await ctx.db.deslike.create({
-      data: {
-        senderId: input.senderId,
-        postId: input.postId,
-      }
-    })
-  }),
+        orderBy: {
+          updatedAt: "asc",
+        },
+      });
+      await ctx.db.post.update({
+        where: {
+          id: post.id,
+        },
+        data: {
+          views: {
+            increment: 1,
+          },
+          updatedAt: new Date(),
+        },
+      });
+      return post;
+    }),
+  like: publicProcedure
+    .input(z.object({ senderId: z.string(), postId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.like.create({
+        data: {
+          senderId: input.senderId,
+          postId: input.postId,
+        },
+      });
+    }),
+  removeLike: publicProcedure
+    .input(z.object({ senderId: z.string(), postId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.like.deleteMany({
+        where: {
+          senderId: input.senderId,
+          postId: input.postId,
+        },
+      });
+    }),
+  deslike: publicProcedure
+    .input(z.object({ senderId: z.string(), postId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.deslike.create({
+        data: {
+          senderId: input.senderId,
+          postId: input.postId,
+        },
+      });
+    }),
 
-  removeDeslike: publicProcedure.input(z.object({ senderId: z.string(), postId: z.string() })).mutation(async ({ ctx, input }) => {
-    await ctx.db.deslike.deleteMany({
-      where: {
-        senderId: input.senderId,
-        postId: input.postId,
-      }
-    })
-  }),
+  removeDeslike: publicProcedure
+    .input(z.object({ senderId: z.string(), postId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.deslike.deleteMany({
+        where: {
+          senderId: input.senderId,
+          postId: input.postId,
+        },
+      });
+    }),
   getAllFromUser: publicProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {

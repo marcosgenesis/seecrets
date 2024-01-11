@@ -1,4 +1,4 @@
-import { useUser } from "@clerk/nextjs";
+import { UserButton, UserProfile, useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   EyeIcon,
@@ -50,9 +50,12 @@ export default function Home() {
   const deslikePost = api.post.deslike.useMutation();
   const removeDeslikePost = api.post.removeDeslike.useMutation();
 
-  const getRandomPost = api.post.getRandomPost.useQuery(undefined, { refetchOnMount: false, refetchOnWindowFocus: false });
+  const getRandomPost = api.post.getRandomPost.useQuery(
+    { userId: user?.id },
+    { refetchOnMount: false, refetchOnWindowFocus: false },
+  );
   const getPosts = api.post.getAllFromUser.useQuery({ userId: user?.id ?? "" });
-  
+
   const form = useForm<z.infer<typeof newPostSchema>>({
     resolver: zodResolver(newPostSchema),
     defaultValues: {
@@ -85,8 +88,7 @@ export default function Home() {
         postId: "96717ee2-162b-486e-9eec-f8a0a53c23a8",
         senderId: user?.id,
       });
-    };
-
+    }
 
     if (value === "like") {
       await removeDeslikePost.mutateAsync({
@@ -108,7 +110,6 @@ export default function Home() {
         senderId: user?.id,
       });
     }
-
   }
 
   return (
@@ -119,38 +120,48 @@ export default function Home() {
             <p className="text-2xl font-medium text-gray-800">
               {getRandomPost.data?.title}
             </p>
-            <p className="">
-              {getRandomPost.data?.content}
-            </p>
+            <p className="">{getRandomPost.data?.content}</p>
           </div>
-
         </div>
         <div className="flex w-1/2 justify-between">
           <Button variant={"outline"} onClick={() => getRandomPost.refetch()}>
             <RefreshCcw size={16} className="mr-2" /> Atualizar
           </Button>
-          <div className="flex gap-2">
-            <ToggleGroup type="single" onValueChange={handlePostActions}>
-              <ToggleGroupItem value="like" variant={"outline"} disabled={likePost.isLoading}>
-                {likePost.isLoading || removeLikePost.isLoading ? <Loader2Icon size={16} className="animate-spin" /> : <ThumbsUp size={16} />}
-              </ToggleGroupItem>
-              <ToggleGroupItem value="deslike" variant={"outline"}>
-                {deslikePost.isLoading || removeDeslikePost.isLoading ? <Loader2Icon size={16} className="animate-spin" /> : <ThumbsDown size={16} />}
-              </ToggleGroupItem>
-            </ToggleGroup>
-            <Button variant={"outline"}>
+          <Button variant={"outline"}>
               <MessageCircle size={16} />
             </Button>
+          <div className="flex gap-2">
+            <ToggleGroup type="single" onValueChange={handlePostActions}>
+              <ToggleGroupItem
+                value="like"
+                variant={"outline"}
+                disabled={likePost.isLoading}
+              >
+                {likePost.isLoading || removeLikePost.isLoading ? (
+                  <Loader2Icon size={16} className="animate-spin" />
+                ) : (
+                  <ThumbsUp size={16} />
+                )}
+              </ToggleGroupItem>
+              <ToggleGroupItem value="deslike" variant={"outline"}>
+                {deslikePost.isLoading || removeDeslikePost.isLoading ? (
+                  <Loader2Icon size={16} className="animate-spin" />
+                ) : (
+                  <ThumbsDown size={16} />
+                )}
+              </ToggleGroupItem>
+            </ToggleGroup>
           </div>
         </div>
-        <div className="my-4 flex items-start justify-center gap-4">
-          <Card>
+        <div className="my-4 w-1/2 flex items-start justify-between gap-4">
+          <Card className="w-full">
             <CardContent className="flex flex-col gap-2 py-4">
               <div className="flex items-center justify-center gap-2">
-                <Avatar>
+                <UserButton />
+                {/* <Avatar>
                   <AvatarImage src={user?.imageUrl} />
                   <AvatarFallback>{user?.firstName[0] ?? "U"}</AvatarFallback>
-                </Avatar>
+                </Avatar> */}
                 <p>Bem vindo novamente, {user?.firstName}!</p>
               </div>
               <Form {...form}>
