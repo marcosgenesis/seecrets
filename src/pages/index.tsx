@@ -123,7 +123,7 @@ export default function Home() {
             <p className="">{getRandomPost.data?.content}</p>
           </div>
         </div>
-        <div className="flex w-1/2 justify-between">
+        <div className="flex w-3/4 justify-between">
           <Button variant={"outline"} onClick={() => getRandomPost.refetch()}>
             <RefreshCcw size={16} className="mr-2" /> Atualizar
           </Button>
@@ -153,8 +153,8 @@ export default function Home() {
             </ToggleGroup>
           </div>
         </div>
-        <div className="my-4 flex w-1/2 items-start justify-between gap-4">
-          <Card className="w-full">
+        <div className="my-4 w-3/4 flex items-start justify-between gap-4">
+          <Card className="w-1/2">
             <CardContent className="flex flex-col gap-2 py-4">
               <div className="flex items-center justify-center gap-2">
                 <UserButton />
