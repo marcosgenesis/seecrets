@@ -11,6 +11,7 @@ import {
   ThumbsUp,
   ViewIcon,
 } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import MyPosts from "~/components/MyPosts";
@@ -44,6 +45,7 @@ const newPostSchema = z.object({
 
 export default function Home() {
   const { user } = useUser();
+  const [postAction, setPostAction] = useState("default");
   const createPost = api.post.create.useMutation();
   const likePost = api.post.like.useMutation();
   const removeLikePost = api.post.removeLike.useMutation();
@@ -78,6 +80,7 @@ export default function Home() {
   }
 
   async function handlePostActions(value: string) {
+    setPostAction(value);
     if (!user) return;
     if (!value) {
       await removeDeslikePost.mutateAsync({
@@ -124,14 +127,24 @@ export default function Home() {
           </div>
         </div>
         <div className="flex w-3/4 justify-between">
-          <Button variant={"outline"} onClick={() => getRandomPost.refetch()}>
+          <Button
+            variant={"outline"}
+            onClick={async () => {
+              await getRandomPost.refetch();
+              setPostAction("default");
+            }}
+          >
             <RefreshCcw size={16} className="mr-2" /> Atualizar
           </Button>
           <Button variant={"outline"}>
             <MessageCircle size={16} />
           </Button>
           <div className="flex gap-2">
-            <ToggleGroup type="single" onValueChange={handlePostActions}>
+            <ToggleGroup
+              type="single"
+              onValueChange={handlePostActions}
+              value={postAction}
+            >
               <ToggleGroupItem
                 value="like"
                 variant={"outline"}
@@ -153,7 +166,7 @@ export default function Home() {
             </ToggleGroup>
           </div>
         </div>
-        <div className="my-4 w-3/4 flex items-start justify-between gap-4">
+        <div className="my-4 flex w-3/4 items-start justify-between gap-4">
           <Card className="w-1/2">
             <CardContent className="flex flex-col gap-2 py-4">
               <div className="flex items-center justify-center gap-2">
