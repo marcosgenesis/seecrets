@@ -32,7 +32,7 @@ const MyPosts: React.FC = () => {
   }
 
   return (
-    <Card className="flex w-1/2 flex-col gap-2">
+    <Card className="flex w-3/4 mt-4 flex-col gap-2">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           Minhas postagens
@@ -42,7 +42,7 @@ const MyPosts: React.FC = () => {
             onClick={() => setShowList(!showList)}
           >
             {!showList ? (
-              <ListIcon className="text-black" size={16} />
+              <ListIcon size={16} />
             ) : (
               <Focus size={16} />
             )}
@@ -96,7 +96,7 @@ const MyPosts: React.FC = () => {
               <CarouselContent>
                 {posts.data.map((item) => (
                   <CarouselItem key={item.id}>
-                    <div className="flex h-full flex-col items-center justify-evenly rounded-md bg-gray-50 p-4">
+                    <div className="flex h-full flex-col items-center justify-evenly rounded-md bg-gray-50 dark:bg-zinc-900 p-4">
                       <p className="text-xl font-medium">{item.title}</p>
                       <p className="overflow-hidden text-ellipsis text-sm">
                         {item.content}

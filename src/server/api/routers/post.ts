@@ -127,4 +127,23 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
+  commentPost: publicProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+        userId: z.string(),
+        comment: z
+          .string()
+          .min(3, { message: "Comentário deve ter no mínimo 3 caracteres" }),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.comment.create({
+        data: {
+          postId: input.postId,
+          content: input.comment,
+          senderId: input.userId,
+        },
+      });
+    }),
 });

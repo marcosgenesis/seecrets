@@ -1,27 +1,24 @@
-import { UserButton, UserProfile, useUser } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Header } from "~/components/Header";
 import {
-  EyeIcon,
-  Loader,
   Loader2Icon,
-  LoaderIcon,
-  MessageCircle,
   RefreshCcw,
   ThumbsDown,
   ThumbsUp,
   ViewIcon,
 } from "lucide-react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import CommentDialog from "~/components/CommentDialog";
 import MyPosts from "~/components/MyPosts";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -45,6 +42,7 @@ const newPostSchema = z.object({
 
 export default function Home() {
   const { user } = useUser();
+  const router = useRouter();
   const [postAction, setPostAction] = useState("default");
   const createPost = api.post.create.useMutation();
   const likePost = api.post.like.useMutation();
@@ -54,9 +52,20 @@ export default function Home() {
 
   const getRandomPost = api.post.getRandomPost.useQuery(
     { userId: user?.id },
-    { refetchOnMount: false, refetchOnWindowFocus: false },
+    {
+      refetchOnMount: false, refetchOnWindowFocus: false, enabled: !!user?.id, onSuccess: (data) => {
+        router.push({
+          pathname: router.pathname,
+          query: { ...router.query, postId: data?.id },
+        }).then(() => { }).catch(console.error);
+      }
+    },
   );
-  const getPosts = api.post.getAllFromUser.useQuery({ userId: user?.id ?? "" });
+
+  const getPosts = api.post.getAllFromUser.useQuery(
+    { userId: user?.id ?? "" },
+    { enabled: !!user?.id },
+  );
 
   const form = useForm<z.infer<typeof newPostSchema>>({
     resolver: zodResolver(newPostSchema),
@@ -118,9 +127,10 @@ export default function Home() {
   return (
     <div>
       <div className="flex h-dvh flex-col items-center justify-center">
+        <Header />
         <div className="flex h-1/2 flex-col items-center justify-around">
           <div className="flex flex-col gap-4 text-center">
-            <p className="text-2xl font-medium text-gray-800">
+            <p className="text-2xl font-medium">
               {getRandomPost.data?.title}
             </p>
             <p className="">{getRandomPost.data?.content}</p>
@@ -136,9 +146,7 @@ export default function Home() {
           >
             <RefreshCcw size={16} className="mr-2" /> Atualizar
           </Button>
-          <Button variant={"outline"}>
-            <MessageCircle size={16} />
-          </Button>
+          <CommentDialog />
           <div className="flex gap-2">
             <ToggleGroup
               type="single"
@@ -166,81 +174,7 @@ export default function Home() {
             </ToggleGroup>
           </div>
         </div>
-        <div className="my-4 flex w-3/4 items-start justify-between gap-4">
-          <Card className="w-1/2">
-            <CardContent className="flex flex-col gap-2 py-4">
-              <div className="flex items-center justify-center gap-2">
-                <UserButton />
-                {/* <Avatar>
-                  <AvatarImage src={user?.imageUrl} />
-                  <AvatarFallback>{user?.firstName[0] ?? "U"}</AvatarFallback>
-                </Avatar> */}
-                <p>Bem vindo novamente, {user?.firstName}!</p>
-              </div>
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-2"
-                >
-                  <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Título</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Título da postagem" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="content"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Descrição</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Descrição da postagem"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="uniqueView"
-                    render={({ field }) => (
-                      <div className="flex items-center gap-2">
-                        <Toggle
-                          onPressedChange={field.onChange}
-                          pressed={field.value}
-                          variant={"outline"}
-                          {...field}
-                        >
-                          <ViewIcon />
-                        </Toggle>
-                        <p>Visualização única</p>
-                      </div>
-                    )}
-                  />
-                  <Button
-                    className="w-full"
-                    type="submit"
-                    disabled={createPost.isLoading}
-                  >
-                    {createPost.isLoading ? "Carregando..." : "Criar postagem"}
-                  </Button>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
-          <MyPosts />
-        </div>
+        <MyPosts />
       </div>
     </div>
   );
