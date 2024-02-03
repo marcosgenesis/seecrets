@@ -125,6 +125,9 @@ export const postRouter = createTRPCRouter({
             },
           },
         },
+        orderBy: {
+          createdAt: 'desc'
+        }
       });
     }),
   commentPost: publicProcedure
