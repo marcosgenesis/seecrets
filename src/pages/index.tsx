@@ -62,10 +62,6 @@ export default function Home() {
     },
   );
 
-  const getPosts = api.post.getAllFromUser.useQuery(
-    { userId: user?.id ?? "" },
-    { enabled: !!user?.id },
-  );
 
   const form = useForm<z.infer<typeof newPostSchema>>({
     resolver: zodResolver(newPostSchema),
@@ -174,7 +170,7 @@ export default function Home() {
             </ToggleGroup>
           </div>
         </div>
-        <MyPosts />
+        {/* <MyPosts /> */}
       </div>
     </div>
   );

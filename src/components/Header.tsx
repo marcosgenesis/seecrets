@@ -7,8 +7,11 @@ import { useForm } from "react-hook-form"
 import { Input } from "./ui/input"
 import { Switch } from "./ui/switch"
 import { ModeToggle } from "./mode-toggle"
+import Link from "next/link"
+import { useRouter } from "next/router"
 
 export const Header = () => {
+  const router = useRouter();
   const form = useForm({
     defaultValues: {
       title: "",
@@ -18,7 +21,11 @@ export const Header = () => {
   });
 
   return <div className="flex justify-between w-3/4 mt-4">
-    <UserButton />
+    <div className="flex gap-4 items-center justify-center">
+      <UserButton />
+      <Link href="/" className="data-[active=true]:font-medium data-[active=false]:text-gray-500" data-active={router.pathname === '/'}>Inicio</Link>
+      <Link href="/my-posts" className="data-[active=true]:font-medium data-[active=false]:text-gray-500" data-active={router.pathname === '/my-posts'}>Minhas postagens</Link>
+    </div>
     <div className="flex items-center justify-center gap-2">
       <AlertDialog>
         <AlertDialogTrigger>

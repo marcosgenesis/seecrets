@@ -146,4 +146,21 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
+  getPostById: publicProcedure.input(z.object({ postId: z.string() })).query(async ({ ctx, input }) => {
+    return ctx.db.post.findUnique({
+      where: {
+        id: input.postId,
+      },
+      include: {
+        comments: true,
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+            deslikes: true,
+          },
+        },
+      }
+    });
+  })
 });
