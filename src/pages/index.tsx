@@ -1,50 +1,22 @@
-import { UserButton, useUser } from "@clerk/nextjs";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useUser } from "@clerk/nextjs";
 import { Header } from "~/components/Header";
 import {
   Loader2Icon,
   RefreshCcw,
   ThumbsDown,
   ThumbsUp,
-  ViewIcon,
 } from "lucide-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import CommentDialog from "~/components/CommentDialog";
-import MyPosts from "~/components/MyPosts";
 import { Button } from "~/components/ui/button";
-import { Card, CardContent } from "~/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { Textarea } from "~/components/ui/textarea";
-import { Toggle } from "~/components/ui/toggle";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { api } from "~/utils/api";
-
-const newPostSchema = z.object({
-  title: z.string().min(2, {
-    message: "Título precisa conter pelo menos 2 caracteres.",
-  }),
-  content: z.string().min(2, {
-    message: "Descrição precisa conter pelo menos 2 caracteres.",
-  }),
-  uniqueView: z.boolean().default(false),
-});
 
 export default function Home() {
   const { user } = useUser();
   const router = useRouter();
   const [postAction, setPostAction] = useState("default");
-  const createPost = api.post.create.useMutation();
   const likePost = api.post.like.useMutation();
   const removeLikePost = api.post.removeLike.useMutation();
   const deslikePost = api.post.deslike.useMutation();
@@ -62,27 +34,6 @@ export default function Home() {
     },
   );
 
-
-  const form = useForm<z.infer<typeof newPostSchema>>({
-    resolver: zodResolver(newPostSchema),
-    defaultValues: {
-      title: "",
-      content: "",
-      uniqueView: false,
-    },
-  });
-
-  async function onSubmit(values: z.infer<typeof newPostSchema>) {
-    if (!user) return;
-    await createPost.mutateAsync({
-      title: values.title,
-      content: values.content,
-      senderId: user?.id,
-      uniqueView: values.uniqueView,
-    });
-    form.reset();
-    await getPosts.refetch();
-  }
 
   async function handlePostActions(value: string) {
     setPostAction(value);
