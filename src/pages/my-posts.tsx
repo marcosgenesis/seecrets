@@ -3,6 +3,7 @@ import { EyeIcon, MessageCircleIcon, ThumbsDownIcon, ThumbsUpIcon } from "lucide
 import { useState } from "react";
 import { Header } from "~/components/Header";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "~/components/ui/alert-dialog";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "~/components/ui/carousel";
@@ -27,8 +28,10 @@ export default function MyPosts() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Criado em</TableHead>
                 <TableHead className="w-[100px]">Título</TableHead>
                 <TableHead>Visualizações</TableHead>
+                <TableHead>Visualização única</TableHead>
                 <TableHead>Comentários</TableHead>
                 <TableHead>Likes</TableHead>
                 <TableHead>Dislikes</TableHead>
@@ -38,6 +41,9 @@ export default function MyPosts() {
             <TableBody>
               {getPosts.data?.map((item) => (
                 <TableRow key={item.id}>
+                  <TableCell className="w-1/4">
+                    <p className="align-baseline">{item.createdAt.toLocaleString()}</p>
+                  </TableCell>
                   <TableCell className="w-3/4">
                     <span>
                       <p>{item.title}</p>
@@ -49,6 +55,9 @@ export default function MyPosts() {
                       <EyeIcon size={16} />
                       <p className="align-baseline">{item.views}</p>
                     </div>
+                  </TableCell>
+                  <TableCell className="w-1/4">
+                    <Badge variant="outline">{item.uniqueView ? 'SIM' : 'NÃO'}</Badge>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
