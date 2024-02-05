@@ -3,14 +3,6 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const postRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-
   create: publicProcedure
     .input(
       z.object({
@@ -21,9 +13,6 @@ export const postRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
       return ctx.db.post.create({
         data: {
           title: input.title,
@@ -109,10 +98,14 @@ export const postRouter = createTRPCRouter({
       });
     }),
   getAllFromUser: publicProcedure
-    .input(z.object({ userId: z.string() }))
+    .input(
+      z.object({
+        userId: z.string(),
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish()
+      }))
     .query(async ({ ctx, input }) => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      return ctx.db.post.findMany({
+      const items = await ctx.db.post.findMany({
         where: {
           senderId: input.userId,
         },
@@ -127,8 +120,19 @@ export const postRouter = createTRPCRouter({
         },
         orderBy: {
           createdAt: 'desc'
-        }
+        },
+        take: input.limit + 1,
+        cursor: input.cursor ? { id: input.cursor } : undefined
       });
+      let nextCursor: typeof input.cursor | undefined = undefined;
+      if (items.length > input.limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem!.id;
+      }
+      return {
+        items,
+        nextCursor
+      }
     }),
   commentPost: publicProcedure
     .input(
