@@ -23,13 +23,15 @@ export default function Home() {
   const removeDeslikePost = api.post.removeDeslike.useMutation();
 
   const getRandomPost = api.post.getRandomPost.useQuery(
-    { userId: user?.id },
+    { userId: user?.id ?? '' },
     {
-      refetchOnMount: false, refetchOnWindowFocus: false, enabled: !!user?.id, onSuccess: (data) => {
+      enabled: !!user?.id,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false, onSuccess: (data) => {
         router.push({
           pathname: router.pathname,
           query: { ...router.query, postId: data?.id },
-        }).then(() => { }).catch(console.error);
+        }).then(console.debug).catch(console.error);
       }
     },
   );
@@ -38,6 +40,7 @@ export default function Home() {
   async function handlePostActions(value: string) {
     setPostAction(value);
     if (!user) return;
+    if (!getRandomPost.data) return;
     if (!value) {
       await removeDeslikePost.mutateAsync({
         postId: getRandomPost.data.id,

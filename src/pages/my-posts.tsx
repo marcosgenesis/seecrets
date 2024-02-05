@@ -15,7 +15,7 @@ export default function MyPosts() {
   const [page, setPage] = useState(1);
   const { user } = useUser();
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
-  const getPostById = api.post.getPostById.useQuery({ postId: selectedPost }, { enabled: selectedPost !== null });
+  const getPostById = api.post.getPostById.useQuery({ postId: selectedPost ?? '' }, { enabled: selectedPost !== null });
 
   const getPosts = api.post.getAllFromUser.useInfiniteQuery(
     { userId: user?.id ?? "", limit: 10 },

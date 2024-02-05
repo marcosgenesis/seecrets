@@ -56,14 +56,12 @@ export const Header = () => {
         toast.toast({
           title: "Publicação criada",
           description: "Sua publicação foi criada com sucesso.",
-          type: "success",
         });
       },
       onError: (error) => {
         toast.toast({
           title: "Erro ao criar publicação",
           description: error.message,
-          type: "error",
         });
       }
     });
@@ -126,8 +124,7 @@ export const Header = () => {
                         <p className="text-sm">Apenas uma pessoa no mundo inteiro irá ver essa publicação</p>
                       </div>
                       <FormControl>
-                        <Switch checked={field.value}
-                          onCheckedChange={field.onChange} {...field} />
+                        <Switch {...field} value={field.value ? 'checked' : 'unchecked'} checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

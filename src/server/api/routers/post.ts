@@ -43,6 +43,9 @@ export const postRouter = createTRPCRouter({
           updatedAt: "asc",
         },
       });
+      if (!post) {
+        return null;
+      }
       await ctx.db.post.update({
         where: {
           id: post.id,
@@ -101,10 +104,11 @@ export const postRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
-        limit: z.number().min(1).max(100).nullish(),
+        limit: z.number().min(1).max(100).default(10),
         cursor: z.string().nullish()
       }))
     .query(async ({ ctx, input }) => {
+      const { limit = 10, cursor } = input;
       const items = await ctx.db.post.findMany({
         where: {
           senderId: input.userId,
@@ -121,11 +125,11 @@ export const postRouter = createTRPCRouter({
         orderBy: {
           createdAt: 'desc'
         },
-        take: input.limit + 1,
-        cursor: input.cursor ? { id: input.cursor } : undefined
+        take: limit + 1,
+        cursor: cursor ? { id: cursor } : undefined
       });
-      let nextCursor: typeof input.cursor | undefined = undefined;
-      if (items.length > input.limit) {
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (items.length > limit) {
         const nextItem = items.pop();
         nextCursor = nextItem!.id;
       }

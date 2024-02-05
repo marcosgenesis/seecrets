@@ -44,7 +44,7 @@ const CommentDialog: React.FC = () => {
   const { user } = useUser();
   const router = useRouter();
   const { toast } = useToast();
-  const { postId } = router.query as QueryParams;
+  const { postId } = router.query as unknown as QueryParams;
   const commentPost = api.post.commentPost.useMutation();
   const form = useForm<z.infer<typeof commentSchema>>({
     resolver: zodResolver(commentSchema),
