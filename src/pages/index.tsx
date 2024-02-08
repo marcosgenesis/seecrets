@@ -1,5 +1,5 @@
 import { useUser } from "@clerk/nextjs";
-import { Header } from "~/components/Header";
+import { Header } from "~/components/header";
 import {
   Loader2Icon,
   RefreshCcw,
@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import CommentDialog from "~/components/CommentDialog";
+import CommentDialog from "~/components/comment-dialog";
 import { Button } from "~/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { api } from "~/utils/api";
