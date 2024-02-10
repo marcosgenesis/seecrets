@@ -8,6 +8,7 @@ import {
   ThumbsUpIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { DeletePostDialog } from "~/components/delete-post-dialog";
 import { Header } from "~/components/header";
 import { NewPostButton } from "~/components/new-post";
 import {
@@ -60,44 +61,25 @@ import { api } from "~/utils/api";
 export default function MyPosts() {
   const [page, setPage] = useState(1);
   const { user } = useUser();
-  const [selectedPost, setSelectedPost] = useState<string | null>(null);
-  const getPostById = api.post.getPostById.useQuery(
-    { postId: selectedPost ?? "" },
-    { enabled: selectedPost !== null },
-  );
 
   const getPosts = api.post.getAllFromUser.useInfiniteQuery(
     { userId: user?.id ?? "", limit: 10 },
     {
       enabled: !!user?.id,
-      getNextPageParam: (lastPage, allPages) => {
-        console.log(allPages);
+      getNextPageParam: (_, allPages) => {
         return allPages[page - 1]?.nextCursor;
       },
     },
   );
 
-  if (getPostById.isLoading && getPosts.data?.pages[0]?.items.length === 0) {
-    return (
-      <div className="flex flex-col items-center">
-        <span className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 ">
-          <Search size={48} />
-        </span>
-        <p className="text-2xl font-medium">Alô.. alguém ai?</p>
-        <p className="mb-8 w-4/5 text-center">
-          Você ainda não possui nenhuma publicação criada, para criar a primeira
-          basta clicar no botão abaixo
-        </p>
-        <NewPostButton />
-      </div>
-    );
-  }
-
   return (
     <div>
       <div className="flex w-full flex-col items-center justify-center">
         <Header />
-        <div className="mt-8 flex w-3/4 flex-col gap-2">
+        <div
+          className="mt-8 flex w-3/4 flex-col gap-2 data-[hidden=true]:hidden"
+          data-hidden={getPosts.data?.pages[0]?.items.length === 0}
+        >
           <Table>
             <TableHeader>
               <TableRow>
@@ -161,9 +143,15 @@ export default function MyPosts() {
                           <MoreVerticalIcon size={16} />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent
+                        className="flex flex-col gap-2"
+                        align="end"
+                      >
                         <DropdownMenuItem asChild>
                           <ViewCommentsDialog postId={item.id} />
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <DeletePostDialog postId={item.id} />
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -206,6 +194,20 @@ export default function MyPosts() {
               </PaginationItem>
             </PaginationContent>
           </Pagination>
+        </div>
+        <div
+          className="flex flex-col items-center data-[hidden=true]:hidden"
+          data-hidden={getPosts.data?.pages[0]?.items.length !== 0}
+        >
+          <span className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 ">
+            <Search size={48} />
+          </span>
+          <p className="text-2xl font-medium">Alô.. alguém ai?</p>
+          <p className="mb-8 w-4/5 text-center">
+            Você ainda não possui nenhuma publicação criada, para criar a
+            primeira basta clicar no botão abaixo
+          </p>
+          <NewPostButton />
         </div>
       </div>
     </div>

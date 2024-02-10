@@ -12,6 +12,7 @@ import CommentDialog from "~/components/comment-dialog";
 import { Button } from "~/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { api } from "~/utils/api";
+import Layout from "~/components/layout";
 
 export default function Home() {
   const { user } = useUser();

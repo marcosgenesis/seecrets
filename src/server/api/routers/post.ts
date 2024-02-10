@@ -105,8 +105,9 @@ export const postRouter = createTRPCRouter({
       z.object({
         userId: z.string(),
         limit: z.number().min(1).max(100).default(10),
-        cursor: z.string().nullish()
-      }))
+        cursor: z.string().nullish(),
+      }),
+    )
     .query(async ({ ctx, input }) => {
       const { limit = 10, cursor } = input;
       const items = await ctx.db.post.findMany({
@@ -123,10 +124,10 @@ export const postRouter = createTRPCRouter({
           },
         },
         orderBy: {
-          createdAt: 'desc'
+          createdAt: "desc",
         },
         take: limit + 1,
-        cursor: cursor ? { id: cursor } : undefined
+        cursor: cursor ? { id: cursor } : undefined,
       });
       let nextCursor: typeof cursor | undefined = undefined;
       if (items.length > limit) {
@@ -135,8 +136,8 @@ export const postRouter = createTRPCRouter({
       }
       return {
         items,
-        nextCursor
-      }
+        nextCursor,
+      };
     }),
   commentPost: publicProcedure
     .input(
@@ -157,21 +158,32 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
-  getPostById: publicProcedure.input(z.object({ postId: z.string() })).query(async ({ ctx, input }) => {
-    return ctx.db.post.findUnique({
-      where: {
-        id: input.postId,
-      },
-      include: {
-        comments: true,
-        _count: {
-          select: {
-            comments: true,
-            likes: true,
-            deslikes: true,
+  getPostById: publicProcedure
+    .input(z.object({ postId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.post.findUnique({
+        where: {
+          id: input.postId,
+        },
+        include: {
+          comments: true,
+          _count: {
+            select: {
+              comments: true,
+              likes: true,
+              deslikes: true,
+            },
           },
         },
-      }
-    });
-  })
+      });
+    }),
+  deletePost: publicProcedure
+    .input(z.object({ postId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.post.delete({
+        where: {
+          id: input.postId,
+        },
+      });
+    }),
 });

@@ -42,7 +42,8 @@ export const NewPostButton: React.FC = () => {
   const { user } = useUser();
   const toast = useToast();
   const [open, setOpen] = useState(false);
-  const newPost = api.post.create.useMutation()
+  const utils = api.useUtils();
+  const newPost = api.post.create.useMutation();
 
   const form = useForm<z.infer<typeof newPostSchema>>({
     resolver: zodResolver(newPostSchema),
@@ -55,27 +56,31 @@ export const NewPostButton: React.FC = () => {
 
   async function handleNewPost(data: z.infer<typeof newPostSchema>) {
     if (!user) return;
-    await newPost.mutateAsync({
-      content: data.content,
-      title: data.title,
-      uniqueView: data.uniqueView,
-      senderId: user.id,
-    }, {
-      onSuccess: () => {
-        form.reset();
-        setOpen(false);
-        toast.toast({
-          title: "Publicação criada",
-          description: "Sua publicação foi criada com sucesso.",
-        });
+    await newPost.mutateAsync(
+      {
+        content: data.content,
+        title: data.title,
+        uniqueView: data.uniqueView,
+        senderId: user.id,
       },
-      onError: (error) => {
-        toast.toast({
-          title: "Erro ao criar publicação",
-          description: error.message,
-        });
-      }
-    });
+      {
+        onSuccess: () => {
+          form.reset();
+          setOpen(false);
+          toast.toast({
+            title: "Publicação criada",
+            description: "Sua publicação foi criada com sucesso.",
+          });
+        },
+        onError: (error) => {
+          toast.toast({
+            title: "Erro ao criar publicação",
+            description: error.message,
+          });
+        },
+      },
+    );
+    await utils.invalidate();
   }
 
   return (
@@ -86,9 +91,9 @@ export const NewPostButton: React.FC = () => {
       <AlertDialogContent asChild>
         <div>
           <AlertDialogHeader>
-            <AlertDialogTitle>Comente este post</AlertDialogTitle>
+            <AlertDialogTitle>Nova Publicação</AlertDialogTitle>
             <AlertDialogDescription>
-              Comente sobre o que achou deste post. Críticas, sugestões e etc.
+              Crie uma nova publicação para compartilhar com o mundo.
             </AlertDialogDescription>
           </AlertDialogHeader>
 
