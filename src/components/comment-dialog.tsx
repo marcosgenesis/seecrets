@@ -74,7 +74,7 @@ const CommentDialog: React.FC = () => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
+      <AlertDialogTrigger asChild>
         <Button size={'icon'} variant={'outline'}>
           <MessageCircle size={16} />
         </Button>

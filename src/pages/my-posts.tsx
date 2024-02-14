@@ -73,10 +73,10 @@ export default function MyPosts() {
   );
 
   return (
-    <div>
+    <div className="h-screen w-full">
       <div className="flex w-full flex-col items-center justify-center">
         <Header />
-        <div
+        <Card
           className="mt-8 flex w-3/4 flex-col gap-2 data-[hidden=true]:hidden"
           data-hidden={getPosts.data?.pages[0]?.items.length === 0}
         >
@@ -194,9 +194,9 @@ export default function MyPosts() {
               </PaginationItem>
             </PaginationContent>
           </Pagination>
-        </div>
+        </Card>
         <div
-          className="flex flex-col items-center data-[hidden=true]:hidden"
+          className="flex my-4 flex-col items-center data-[hidden=true]:hidden"
           data-hidden={getPosts.data?.pages[0]?.items.length !== 0}
         >
           <span className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 ">

@@ -3,12 +3,13 @@ import { ModeToggle } from "./mode-toggle";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { NewPostButton } from "./new-post";
+import { Card } from "./ui/card";
 
 export const Header = () => {
   const router = useRouter();
 
   return (
-    <div className="mt-4 flex w-3/4 justify-between">
+    <Card className="mt-4 px-4 py-2 flex w-3/4 justify-between">
       <div className="flex items-center justify-center gap-4">
         <UserButton />
         <Link
@@ -30,6 +31,6 @@ export const Header = () => {
         <NewPostButton />
         <ModeToggle />
       </div>
-    </div>
+    </Card>
   );
 };

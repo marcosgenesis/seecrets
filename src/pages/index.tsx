@@ -77,7 +77,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="flex h-dvh flex-col items-center justify-center">
+      <div className="flex h-dvh flex-col items-center ">
         <Header />
         <div className="flex h-1/2 flex-col items-center justify-around">
           <div className="flex flex-col gap-4 text-center">

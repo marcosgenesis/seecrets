@@ -85,7 +85,7 @@ export const NewPostButton: React.FC = () => {
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger>
+      <AlertDialogTrigger asChild>
         <Button>Nova publicação</Button>
       </AlertDialogTrigger>
       <AlertDialogContent asChild>
