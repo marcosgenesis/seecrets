@@ -22,7 +22,20 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
-
+  getRandomPosts: publicProcedure
+    .input(z.object({ take: z.number().default(10) }))
+    .query(async ({ ctx, input }) => {
+      const posts = await ctx.db.post.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: input.take,
+      });
+      if (posts.length === 0) {
+        return []
+      }
+      return posts;
+    }),
   getRandomPost: publicProcedure
     .input(
       z.object({
