@@ -31,51 +31,13 @@ export const schema = z.object({
 });
 
 export default function SignInForm() {
-  const { isLoaded, signIn, setActive } = useSignIn();
-  const router = useRouter();
-  const toast = useToast();
-  const form = useForm({
-    resolver: zodResolver(schema),
-  });
+  const { signIn } = useSignIn();
   const constraintsRef = useRef(null);
   const getRandomPosts = api.post.getRandomPosts.useQuery({ take: 10 });
 
-  const handleSubmit: SubmitHandler<z.infer<typeof schema>> = async ({
-    email,
-    password,
-  }) => {
-    if (!isLoaded) {
-      return;
-    }
-
-    try {
-      const result = await signIn.create({
-        identifier: email,
-        password,
-      });
-      console.log(result);
-
-      if (result.status === "complete") {
-        console.log(result);
-        await setActive({ session: result.createdSessionId });
-        await router.push("/");
-      } else {
-        /*Investigate why the login hasn't completed */
-        console.log(result);
-      }
-    } catch (err) {
-      toast.toast({
-        title: "Login inválido",
-        description:
-          "Não foi possível fazer login, verifique suas credenciais.",
-      });
-      console.error("error", err);
-    }
-  };
-
   return (
     <div className="flex h-screen w-full items-center justify-center">
-      <Card className="z-50 flex w-1/3 flex-col gap-4 bg-white px-8 py-4 shadow-md">
+      <Card className="z-50 flex w-1/3 flex-col items-center gap-4 bg-white px-8 py-4 shadow-md">
         <span className="mt-8 self-start rounded-lg border p-2">
           <TargetIcon />
         </span>
@@ -97,48 +59,6 @@ export default function SignInForm() {
           >
             Entrar com o Google
           </Button>
-        </div>
-        <Form {...form}>
-          <form
-            className="flex w-full flex-col gap-4"
-            onSubmit={form.handleSubmit(handleSubmit)}
-          >
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="fulano@gmail.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Senha</FormLabel>
-                  <FormControl>
-                    <Input placeholder="batatinha123" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button className="w-full">Entrar</Button>
-          </form>
-        </Form>
-        <Separator />
-
-        <div className="flex items-center gap-2">
-          <p className="text-gray-500">Sem conta?</p>
-          <Link href="/sign-up" className="hover:underline">
-            Cadastre-se Agora
-          </Link>
         </div>
       </Card>
       <motion.div className="absolute h-screen w-full" ref={constraintsRef}>
