@@ -59,20 +59,12 @@ export default function Home() {
     }
 
     if (value === "like") {
-      await removeDeslikePost.mutateAsync({
-        postId: getRandomPost.data.id,
-        senderId: user?.id,
-      });
       await likePost.mutateAsync({
         postId: getRandomPost.data.id,
         senderId: user?.id,
       });
     }
     if (value === "deslike") {
-      await removeLikePost.mutateAsync({
-        postId: getRandomPost.data.id,
-        senderId: user?.id,
-      });
       await deslikePost.mutateAsync({
         postId: getRandomPost.data.id,
         senderId: user?.id,
@@ -171,7 +163,6 @@ export default function Home() {
             </ToggleGroup>
           </div>
         </div>
-        {/* <MyPosts /> */}
       </div>
     </div>
   );

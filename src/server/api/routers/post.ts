@@ -32,7 +32,7 @@ export const postRouter = createTRPCRouter({
         take: input.take,
       });
       if (posts.length === 0) {
-        return []
+        return [];
       }
       return posts;
     }),
@@ -75,6 +75,20 @@ export const postRouter = createTRPCRouter({
   like: publicProcedure
     .input(z.object({ senderId: z.string(), postId: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      const findDislike = await ctx.db.deslike.findFirst({
+        where: {
+          senderId: input.senderId,
+          postId: input.postId,
+        },
+      });
+      if (findDislike) {
+        await ctx.db.deslike.delete({
+          where: {
+            id: findDislike.id,
+          },
+        });
+      }
+
       await ctx.db.like.create({
         data: {
           senderId: input.senderId,
@@ -95,6 +109,20 @@ export const postRouter = createTRPCRouter({
   deslike: publicProcedure
     .input(z.object({ senderId: z.string(), postId: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      const findLike = await ctx.db.like.findFirst({
+        where: {
+          senderId: input.senderId,
+          postId: input.postId,
+        },
+      });
+      if (findLike) {
+        await ctx.db.like.delete({
+          where: {
+            id: findLike.id,
+          },
+        });
+      }
+
       await ctx.db.deslike.create({
         data: {
           senderId: input.senderId,
