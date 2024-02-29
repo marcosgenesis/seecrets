@@ -45,9 +45,6 @@ export const postRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const post = await ctx.db.post.findFirst({
         where: {
-          views: {
-            gte: 0,
-          },
           postUsersView: {
             none: {
               userId: input.userId,

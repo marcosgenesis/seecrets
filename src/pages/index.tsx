@@ -89,7 +89,7 @@ export default function Home() {
       <div className="flex h-dvh flex-col items-center gap-4">
         <Header />
         <motion.div
-          className="min-w-1/4 max-w-screen-lg flex items-center justify-center"
+          className="min-w-1/4 flex max-w-screen-lg items-center justify-center"
           style={{
             perspective: 800,
             display: "flex",
@@ -101,7 +101,7 @@ export default function Home() {
         >
           {/* this div can be used as the 'dotted grid' */}
           <motion.div
-            className="w-full min-h-52 flex items-center justify-center"
+            className="flex min-h-52 w-full items-center justify-center"
             style={{
               transformStyle: "preserve-3d",
               perspective: 800,
@@ -110,19 +110,24 @@ export default function Home() {
             }}
             transition={{ velocity: 0 }}
           >
-            <motion.div
-              key="card"
-              className="bg-white dark:bg-zinc-950 text-center dark:border-zinc-800 border-[1px] shadow-md rounded-lg min-w-60 p-4 "
-              style={{
-                transformStyle: "preserve-3d",
-                perspective: 800, // Set perspective on the card
-                transform : `rotateX(${cardRotateX.get()}deg) rotateY(${cardRotateY.get()}deg)`,
-              }}
-              transition={{ velocity: 0 }}
-            >
-              <p className="text-xl font-medium">{getRandomPost.data?.title}</p>
-              <p className="text-sm text-gray-600">{`${getRandomPost.data?.title} - ${getRandomPost.data?.createdAt.toLocaleDateString()}`}</p>
-            </motion.div>
+            {getRandomPost.data && (
+              <motion.div
+                key="card"
+                className="min-w-60 rounded-lg border-[1px] bg-white p-4 text-center shadow-md dark:border-zinc-800 dark:bg-zinc-950 "
+                style={{
+                  transformStyle: "preserve-3d",
+                  perspective: 800, // Set perspective on the card
+                  transform: `rotateX(${cardRotateX.get()}deg) rotateY(${cardRotateY.get()}deg)`,
+                }}
+                transition={{ velocity: 0 }}
+              >
+                <p className="text-xl font-medium">
+                  {getRandomPost.data?.title}
+                </p>
+                <p className="text-sm text-gray-600">{`${getRandomPost.data
+                  ?.title} - ${getRandomPost.data?.createdAt.toLocaleDateString()}`}</p>
+              </motion.div>
+            )}
           </motion.div>
         </motion.div>
         <div className="flex w-3/4 justify-between">
