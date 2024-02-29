@@ -11,18 +11,18 @@ datasource db {
 }
 
 model Post {
-    id         String    @id @default(uuid())
-    title      String
-    content    String
-    senderId   String
-    receiverId String?
-    comments   Comment[]
-    uniqueView Boolean   @default(false)
-    createdAt  DateTime  @default(now())
-    updatedAt  DateTime  @updatedAt
-    likes      Like[]
-    deslikes   Deslike[]
-    views      Int       @default(0)
+    id            String         @id @default(uuid())
+    title         String
+    content       String
+    senderId      String
+    receiverId    String?
+    comments      Comment[]
+    uniqueView    Boolean        @default(false)
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+    likes         Like[]
+    deslikes      Deslike[]
+    postUsersView PostUserView[]
 }
 
 model Like {
@@ -49,6 +49,15 @@ model Comment {
     content   String
     postId    String
     post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model PostUserView {
+    id        String   @id @default(uuid())
+    postId    String
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+    userId    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }

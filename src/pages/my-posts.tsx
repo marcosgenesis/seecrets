@@ -92,7 +92,7 @@ export default function MyPosts() {
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <EyeIcon size={16} />
-                      <p className="align-baseline">{item.views}</p>
+                      <p className="align-baseline">{item._count.postUsersView}</p>
                     </div>
                   </TableCell>
                   <TableCell className="w-1/4">

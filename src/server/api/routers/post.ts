@@ -48,6 +48,11 @@ export const postRouter = createTRPCRouter({
           views: {
             gte: 0,
           },
+          postUsersView: {
+            none: {
+              userId: input.userId,
+            },
+          },
           senderId: {
             not: input.userId,
           },
@@ -59,15 +64,10 @@ export const postRouter = createTRPCRouter({
       if (!post) {
         return null;
       }
-      await ctx.db.post.update({
-        where: {
-          id: post.id,
-        },
+      await ctx.db.postUserView.create({
         data: {
-          views: {
-            increment: 1,
-          },
-          updatedAt: new Date(),
+          postId: post.id,
+          userId: input.userId,
         },
       });
       return post;
@@ -161,6 +161,7 @@ export const postRouter = createTRPCRouter({
               comments: true,
               likes: true,
               deslikes: true,
+              postUsersView: true,
             },
           },
         },
