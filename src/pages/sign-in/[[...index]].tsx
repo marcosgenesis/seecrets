@@ -1,27 +1,12 @@
-import { useAuth, useSignIn } from "@clerk/nextjs";
+import { useSignIn } from "@clerk/nextjs";
 import { motion } from "framer-motion";
-import { useRouter } from "next/router";
-import { type RefObject, useEffect, useMemo, useRef } from "react";
+import { type RefObject, useMemo, useRef } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { TargetIcon, User2Icon } from "lucide-react";
-import Link from "next/link";
-import { type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { Separator } from "~/components/ui/separator";
 import { api } from "~/utils/api";
-import { useToast } from "~/components/ui/use-toast";
 
 export const schema = z.object({
   email: z
@@ -47,7 +32,6 @@ export default function SignInForm() {
         </span>
         <div className="w-full">
           <Button
-            variant={"outline"}
             className="w-full"
             onClick={() =>
               signIn?.authenticateWithRedirect({
