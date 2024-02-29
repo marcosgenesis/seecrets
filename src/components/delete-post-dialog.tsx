@@ -11,7 +11,6 @@ import {
 } from "./ui/alert-dialog";
 import { Button } from "./ui/button";
 import { api } from "~/utils/api";
-import { useUser } from "@clerk/nextjs";
 import { useToast } from "./ui/use-toast";
 
 export const DeletePostDialog: React.FC<{ postId: string }> = ({ postId }) => {

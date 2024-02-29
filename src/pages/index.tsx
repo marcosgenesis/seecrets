@@ -1,18 +1,13 @@
 import { useUser } from "@clerk/nextjs";
 import { Header } from "~/components/header";
-import {
-  Loader2Icon,
-  RefreshCcw,
-  ThumbsDown,
-  ThumbsUp,
-} from "lucide-react";
+import { Loader2Icon, RefreshCcw, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import CommentDialog from "~/components/comment-dialog";
 import { Button } from "~/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { api } from "~/utils/api";
-import Layout from "~/components/layout";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 
 export default function Home() {
   const { user } = useUser();
@@ -23,20 +18,30 @@ export default function Home() {
   const deslikePost = api.post.deslike.useMutation();
   const removeDeslikePost = api.post.removeDeslike.useMutation();
 
+  const cardX = useMotionValue(0);
+  const cardY = useMotionValue(0);
+  const rotateX = useTransform(cardY, [-300, 300], [10, -10]); // Reversed values
+  const rotateY = useTransform(cardX, [-300, 300], [-10, 10]); // Reversed values
+  const cardRotateX = useTransform(cardY, [-300, 300], [25, -25]); // Adjusted rotation values
+  const cardRotateY = useTransform(cardX, [-300, 300], [-25, 25]); // Adjusted rotation values
+
   const getRandomPost = api.post.getRandomPost.useQuery(
-    { userId: user?.id ?? '' },
+    { userId: user?.id ?? "" },
     {
       enabled: !!user?.id,
       refetchOnMount: false,
-      refetchOnWindowFocus: false, onSuccess: (data) => {
-        router.push({
-          pathname: router.pathname,
-          query: { ...router.query, postId: data?.id },
-        }).then(console.debug).catch(console.error);
-      }
+      refetchOnWindowFocus: false,
+      onSuccess: (data) => {
+        router
+          .push({
+            pathname: router.pathname,
+            query: { ...router.query, postId: data?.id },
+          })
+          .then(console.debug)
+          .catch(console.error);
+      },
     },
   );
-
 
   async function handlePostActions(value: string) {
     setPostAction(value);
@@ -75,18 +80,59 @@ export default function Home() {
     }
   }
 
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const offsetX = event.clientX - window.innerWidth / 2;
+    const offsetY = event.clientY - window.innerHeight / 2;
+
+    cardX.set(offsetX);
+    cardY.set(offsetY);
+  };
+
+  const handleMouseLeave = () => {
+    cardX.set(0);
+    cardY.set(0);
+  };
   return (
     <div>
-      <div className="flex h-dvh flex-col items-center ">
+      <div className="flex h-dvh flex-col items-center gap-4">
         <Header />
-        <div className="flex h-1/2 flex-col items-center justify-around">
-          <div className="flex flex-col gap-4 text-center">
-            <p className="text-2xl font-medium">
-              {getRandomPost.data?.title}
-            </p>
-            <p className="">{getRandomPost.data?.content}</p>
-          </div>
-        </div>
+        <motion.div
+          className="min-w-1/4 max-w-screen-lg flex items-center justify-center"
+          style={{
+            perspective: 800,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
+          {/* this div can be used as the 'dotted grid' */}
+          <motion.div
+            className="w-full min-h-52 flex items-center justify-center"
+            style={{
+              transformStyle: "preserve-3d",
+              perspective: 800,
+              rotateX,
+              rotateY,
+            }}
+            transition={{ velocity: 0 }}
+          >
+            <motion.div
+              key="card"
+              className="bg-white dark:bg-zinc-950 text-center dark:border-zinc-800 border-[1px] shadow-md rounded-lg min-w-60 p-4 "
+              style={{
+                transformStyle: "preserve-3d",
+                perspective: 800, // Set perspective on the card
+                transform : `rotateX(${cardRotateX.get()}deg) rotateY(${cardRotateY.get()}deg)`,
+              }}
+              transition={{ velocity: 0 }}
+            >
+              <p className="text-xl font-medium">{getRandomPost.data?.title}</p>
+              <p className="text-sm text-gray-600">{`${getRandomPost.data?.title} - ${getRandomPost.data?.createdAt.toLocaleDateString()}`}</p>
+            </motion.div>
+          </motion.div>
+        </motion.div>
         <div className="flex w-3/4 justify-between">
           <Button
             variant={"outline"}

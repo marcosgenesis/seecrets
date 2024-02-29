@@ -11,27 +11,9 @@ import { useState } from "react";
 import { DeletePostDialog } from "~/components/delete-post-dialog";
 import { Header } from "~/components/header";
 import { NewPostButton } from "~/components/new-post";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "~/components/ui/alert-dialog";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "~/components/ui/carousel";
 import {
   DropdownMenu,
   DropdownMenuContent,
