@@ -1,7 +1,6 @@
 import { useUser } from "@clerk/nextjs";
 import { Header } from "~/components/header";
 import { Loader2Icon, RefreshCcw, ThumbsDown, ThumbsUp } from "lucide-react";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import CommentDialog from "~/components/comment-dialog";
 import { Button } from "~/components/ui/button";
