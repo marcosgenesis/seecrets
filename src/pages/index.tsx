@@ -1,5 +1,5 @@
 import { useUser } from "@clerk/nextjs";
-import { Header } from "~/components/header";
+// import { Header } from "~/components/header";
 import { Loader2Icon, RefreshCcw, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
 import CommentDialog from "~/components/comment-dialog";
