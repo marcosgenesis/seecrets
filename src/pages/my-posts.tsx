@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { DeletePostDialog } from "~/components/delete-post-dialog";
-import { Header } from "~/components/header";
+import { Header } from "~/components/Header";
 import { NewPostButton } from "~/components/new-post";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";

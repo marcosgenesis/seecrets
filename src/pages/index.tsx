@@ -7,7 +7,7 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { api } from "~/utils/api";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { usePost } from "~/contexts/usePost";
-import { Header } from "~/components/header";
+import { Header } from "~/components/Header";
 
 export default function Home() {
   const { user } = useUser();
@@ -15,6 +15,7 @@ export default function Home() {
   const [postAction, setPostAction] = useState("default");
   const likePost = api.post.like.useMutation();
   const removeLikePost = api.post.removeLike.useMutation();
+
   const deslikePost = api.post.deslike.useMutation();
   const removeDeslikePost = api.post.removeDeslike.useMutation();
 
