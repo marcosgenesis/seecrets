@@ -1,5 +1,4 @@
 import { useUser } from "@clerk/nextjs";
-// import { Header } from "~/components/header";
 import { Loader2Icon, RefreshCcw, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
 import CommentDialog from "~/components/comment-dialog";
@@ -8,6 +7,7 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { api } from "~/utils/api";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { usePost } from "~/contexts/usePost";
+import { Header } from "~/components/header";
 
 export default function Home() {
   const { user } = useUser();
