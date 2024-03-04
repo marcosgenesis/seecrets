@@ -8,10 +8,11 @@ import { Button } from "~/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { api } from "~/utils/api";
 import { motion, useMotionValue, useTransform } from "framer-motion";
+import { usePost } from "~/contexts/usePost";
 
 export default function Home() {
   const { user } = useUser();
-  const router = useRouter();
+  const { postId, setPostId } = usePost();
   const [postAction, setPostAction] = useState("default");
   const likePost = api.post.like.useMutation();
   const removeLikePost = api.post.removeLike.useMutation();
@@ -32,13 +33,9 @@ export default function Home() {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       onSuccess: (data) => {
-        router
-          .push({
-            pathname: router.pathname,
-            query: { ...router.query, postId: data?.id },
-          })
-          .then(console.debug)
-          .catch(console.error);
+        if (data) {
+          setPostId(data.id);
+        }
       },
     },
   );
@@ -49,24 +46,24 @@ export default function Home() {
     if (!getRandomPost.data) return;
     if (!value) {
       await removeDeslikePost.mutateAsync({
-        postId: getRandomPost.data.id,
+        postId,
         senderId: user?.id,
       });
       await removeLikePost.mutateAsync({
-        postId: getRandomPost.data.id,
+        postId,
         senderId: user?.id,
       });
     }
 
     if (value === "like") {
       await likePost.mutateAsync({
-        postId: getRandomPost.data.id,
+        postId,
         senderId: user?.id,
       });
     }
     if (value === "deslike") {
       await deslikePost.mutateAsync({
-        postId: getRandomPost.data.id,
+        postId,
         senderId: user?.id,
       });
     }
@@ -99,7 +96,6 @@ export default function Home() {
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
-          {/* this div can be used as the 'dotted grid' */}
           <motion.div
             className="flex min-h-52 w-full items-center justify-center"
             style={{
@@ -116,7 +112,7 @@ export default function Home() {
                 className="min-w-60 rounded-lg border-[1px] bg-white p-4 text-center shadow-md dark:border-zinc-800 dark:bg-zinc-950 "
                 style={{
                   transformStyle: "preserve-3d",
-                  perspective: 800, // Set perspective on the card
+                  perspective: 800,
                   transform: `rotateX(${cardRotateX.get()}deg) rotateY(${cardRotateY.get()}deg)`,
                 }}
                 transition={{ velocity: 0 }}
