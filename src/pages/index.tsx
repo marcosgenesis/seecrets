@@ -7,7 +7,8 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { api } from "~/utils/api";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { usePost } from "~/contexts/usePost";
-import { Header } from "~/components/Header";
+import { Header } from "~/components/header";
+import Image from "next/image";
 
 export default function Home() {
   const { user } = useUser();
@@ -126,7 +127,27 @@ export default function Home() {
             )}
           </motion.div>
         </motion.div>
-        <div className="flex w-3/4 justify-between">
+        <div
+          data-hidden={!!getRandomPost.data}
+          className="flex w-3/4 flex-col items-center justify-center gap-4 data-[hidden=true]:hidden"
+        >
+          <Image
+            src="/empty-post.png"
+            width={300}
+            height={300}
+            alt="Empty state"
+            className=" dark:invert "
+          />
+          <p className="text-3xl font-medium">Alô.. alguém ai?</p>
+          <p className="mb-8 w-2/5 text-center text-gray-500">
+            Parece que não temos nenhum post por aqui. Crie um novo post ou
+            atualize a página para ver mais posts.
+          </p>
+        </div>
+        <div
+          data-hidden={!getRandomPost.data}
+          className="flex w-3/4 justify-between data-[hidden=true]:hidden"
+        >
           <Button
             variant={"outline"}
             onClick={async () => {
