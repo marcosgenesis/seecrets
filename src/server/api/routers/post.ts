@@ -61,12 +61,12 @@ export const postRouter = createTRPCRouter({
       if (!post) {
         return null;
       }
-      await ctx.db.postUserView.create({
-        data: {
-          postId: post.id,
-          userId: input.userId,
-        },
-      });
+      // await ctx.db.postUserView.create({
+      //   data: {
+      //     postId: post.id,
+      //     userId: input.userId,
+      //   },
+      // });
       return post;
     }),
   like: publicProcedure

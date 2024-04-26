@@ -87,7 +87,7 @@ export default function Home() {
       <div className="flex h-dvh flex-col items-center gap-4">
         <Header />
         <motion.div
-          className="min-w-1/4 flex max-w-screen-lg items-center justify-center"
+          className="min-w-1/4 flex w-full max-w-screen-lg flex-col items-center justify-center"
           style={{
             perspective: 800,
             display: "flex",
@@ -97,6 +97,18 @@ export default function Home() {
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: -20},
+              visible: { opacity: 1, y:0},
+            }}
+            initial="hidden"
+            animate={getRandomPost.data ? "visible" : "hidden"}
+            transition={{ duration: 1 }}
+            className="flex justify-center rounded-lg bg-zinc-800 px-2 py-1 text-white"
+          >
+            Só você visualizará esta publicação!
+          </motion.div>
           <motion.div
             className="flex min-h-52 w-full items-center justify-center"
             style={{
