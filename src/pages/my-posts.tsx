@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { DeletePostDialog } from "~/components/delete-post-dialog";
-import { Header } from "~/components/Header";
+// import { Header } from "~/components/Header";
 import { NewPostButton } from "~/components/new-post";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -57,7 +57,7 @@ export default function MyPosts() {
   return (
     <div className="h-screen w-full">
       <div className="flex w-full flex-col items-center justify-center">
-        <Header />
+        {/* <Header /> */}
         <Card
           className="mt-8 flex w-3/4 flex-col gap-2 data-[hidden=true]:hidden"
           data-hidden={getPosts.data?.pages[0]?.items.length === 0}
