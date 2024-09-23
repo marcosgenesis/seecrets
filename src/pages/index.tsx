@@ -105,7 +105,8 @@ export default function Home() {
             initial="hidden"
             animate={getRandomPost.data ? "visible" : "hidden"}
             transition={{ duration: 1 }}
-            className="flex justify-center rounded-lg bg-zinc-800 px-2 py-1 text-white"
+            className="flex justify-center rounded-lg bg-zinc-800 px-2 py-1 text-white data-[hidden=true]:hidden"
+            data-hidden={!getRandomPost.data?.uniqueView}
           >
             Só você visualizará esta publicação!
           </motion.div>
