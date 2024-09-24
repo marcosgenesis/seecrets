@@ -9,7 +9,7 @@ export const Header = () => {
   const router = useRouter();
 
   return (
-    <Card className="mt-4 px-4 py-2 flex w-3/4 justify-between">
+    <Card className="mt-4 flex w-full justify-between px-4 py-2 lg:w-3/4 flex-col lg:flex-row gap-8">
       <div className="flex items-center justify-center gap-4">
         <UserButton />
         <Link

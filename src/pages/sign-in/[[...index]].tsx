@@ -21,8 +21,8 @@ export default function SignInForm() {
   const getRandomPosts = api.post.getRandomPosts.useQuery({ take: 10 });
 
   return (
-    <div className="flex h-screen w-full items-center justify-center">
-      <Card className="z-50 flex w-1/3 flex-col items-center gap-4 bg-white px-8 py-4 shadow-md">
+    <div className="flex h-screen w-full items-center justify-center overflow-hidden">
+      <Card className="z-50 flex w-full sm:mx-4 flex-col items-center gap-4 bg-white px-8 py-4 shadow-md lg:w-1/3 m-4">
         <span className="mt-8 self-start rounded-lg border p-2">
           <TargetIcon />
         </span>
@@ -66,7 +66,7 @@ const RandomPost = ({
   item: { id: string; content: string };
 }) => {
   const leftValue = useMemo(
-    () => Math.floor(Math.random() * (window.innerWidth - 200)),
+    () => Math.floor(Math.random() * (window.innerWidth - 400)),
     [],
   );
   const topValue = useMemo(
